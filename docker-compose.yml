@@ -1,0 +1,47 @@
+# docker-compose.yml
+version: "3"
+services:
+  postgres:
+    image: "postgres:alpine"
+    # ports:
+    #   - "5432:5432/tcp"
+    environment:
+      - POSTGRES_USER=2zyJ2mUF8atRdep5
+      - POSTGRES_PASSWORD=2zyJ2mUF8atRdep5
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=cfssl
+    volumes:
+      - ./db_data:/var/lib/postgresql/data/
+      - ./sql/001_CreateCertificates.sql:/docker-entrypoint-initdb.d/001_CreateCertificates.sql
+      - ./sql/002_AddMetadataToCertificates.sql:/docker-entrypoint-initdb.d/002_AddMetadataToCertificates.sql
+    restart: unless-stopped
+
+  cfssl:
+    build:
+      context: .
+    environment:
+      - POSTGRES_USER=2zyJ2mUF8atRdep5
+      - POSTGRES_PASSWORD=2zyJ2mUF8atRdep5
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=cfssl
+    image: jockerdragon/cfssl-ocsp:latest
+    volumes:
+      - ./certs:/etc/cfssl/certs
+      - ./config/cfssl-config.json:/etc/cfssl/config/cfssl-config.json
+    ports:
+      - "8888:8888"
+      - "8889:8889"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=adminpassword
+      - PGADMIN_DISABLE_POSTFIX=true
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    volumes:
+      - ./pgadmin_data:/var/lib/pgadmin
+    restart: unless-stopped

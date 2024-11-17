@@ -1,0 +1,4 @@
+certs/
+db_data/
+pgadmin_data/
+.git/

@@ -1,0 +1,75 @@
+{
+    "signing": {
+        "default": {
+            "ocsp_url": "http://ocsp.certauth.cn",
+            "crl_url": "http://crl.certauth.cn/crl",
+            "expiry": "26280h",
+            "usages": [
+                "signing",
+                "key encipherment",
+                "client auth"
+            ],
+            "ca_constraint": {
+                "is_ca": true,
+                "max_path_len": 0,
+                "max_path_len_zero": true
+            }
+        },
+        "profiles": {
+            "ocsp": {
+                "auth_key": "key1",
+                "usages": [
+                    "digital signature",
+                    "ocsp signing"
+                ],
+                "expiry": "26280h"
+            },
+            "intermediate": {
+                "auth_key": "key1",
+                "expiry": "43800h",
+                "usages": [
+                    "signing",
+                    "key encipherment",
+                    "cert sign",
+                    "crl sign"
+                ],
+                "ca_constraint": {
+                    "is_ca": true,
+                    "max_path_len": 0,
+                    "max_path_len_zero": true
+                }
+            },
+            "server": {
+                "auth_key": "key1",
+                "expiry": "43800h",
+                "usages": [
+                    "signing",
+                    "key encipherment",
+                    "server auth"
+                ],
+                "ca_constraint": {
+                    "is_ca": false
+                }
+            },
+            "client": {
+                "auth_key": "key1",
+                "expiry": "43800h",
+                "usages": [
+                    "signing",
+                    "key encipherment",
+                    "client auth",
+                    "email protection"
+                ],
+                "ca_constraint": {
+                    "is_ca": false
+                }
+            }
+        }
+    },
+    "auth_keys": {
+        "key1": {
+            "key": "5a1f3b9c7d2e4f8a6b5c4d3e2f1a0b9c",
+            "type": "standard"
+        }
+    }
+}
